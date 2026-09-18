@@ -10,48 +10,7 @@
         Foreground="{DynamicResource TextBrush}"
         ResizeMode="NoResize"
         UseLayoutRounding="True">
-    <Window.Resources>
-        <Style TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="Margin" Value="0,0,0,5" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
-            <Setter Property="Padding" Value="7,4" />
-        </Style>
-        <Style TargetType="ComboBox">
-            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
-            <Setter Property="Padding" Value="7,4" />
-        </Style>
-        <Style TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="Padding" Value="7,4" />
-            <Style.Triggers>
-                <Trigger Property="IsHighlighted" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource ControlBorderBrush}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                </Trigger>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource ControlBorderBrush}" />
-                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <Style TargetType="Button">
-            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
-            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
-            <Setter Property="Padding" Value="10,5" />
-            <Setter Property="Margin" Value="6,0,0,0" />
-        </Style>
-    </Window.Resources>
-
-    <Grid Margin="18,16">
+    <Grid Margin="22,18">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -68,21 +27,26 @@
         </Grid.RowDefinitions>
 
         <TextBlock Grid.Row="0"
+                   Style="{StaticResource SectionLabel}"
                    Text="Micrófono de entrada"
-                   FontWeight="SemiBold" />
+                   />
         <DockPanel Grid.Row="1" Margin="0,0,0,14">
             <Button x:Name="RefreshButton"
+                    Style="{StaticResource SecondaryButton}"
                     DockPanel.Dock="Right"
                     Content="Refrescar"
+                    Margin="10,0,0,0"
                     Click="RefreshButton_OnClick" />
             <ComboBox x:Name="MicrophoneComboBox"
+                      Style="{StaticResource DarkComboBox}"
                       SelectedValuePath="Id"
                       ToolTip="Micrófono que se analizará" />
         </DockPanel>
 
         <TextBlock Grid.Row="2"
+                   Style="{StaticResource SectionLabel}"
                    Text="Nivel captado ahora"
-                   FontWeight="SemiBold" />
+                   />
         <Grid Grid.Row="3" x:Name="PreviewMeterArea" Height="28" Margin="0,0,0,3">
             <Border Background="{DynamicResource PanelBackgroundBrush}"
                     BorderBrush="{DynamicResource ControlBorderBrush}"
@@ -130,7 +94,8 @@
             <TextBlock x:Name="ThresholdValueText"
                        Grid.Column="1"
                        Text="70"
-                       FontWeight="SemiBold" />
+                       FontWeight="SemiBold"
+                       Foreground="{DynamicResource AccentBrush}" />
         </Grid>
         <Slider x:Name="ThresholdSlider"
                 Grid.Row="7"
@@ -150,6 +115,7 @@
             <TextBlock Text="Duración mínima sobre umbral"
                        VerticalAlignment="Center" />
             <TextBox x:Name="DurationTextBox"
+                     Style="{StaticResource DarkTextBox}"
                      Grid.Column="1"
                      HorizontalContentAlignment="Right"
                      Margin="0,0,6,0" />
@@ -168,6 +134,7 @@
             <TextBlock Text="Enfriamiento entre alertas"
                        VerticalAlignment="Center" />
             <TextBox x:Name="CooldownTextBox"
+                     Style="{StaticResource DarkTextBox}"
                      Grid.Column="1"
                      HorizontalContentAlignment="Right"
                      Margin="0,0,6,0" />
@@ -179,12 +146,12 @@
 
         <StackPanel Grid.Row="10" Margin="0,0,0,12">
             <CheckBox x:Name="BeepCheckBox"
+                      Style="{StaticResource DarkCheckBox}"
                       Content="Reproducir pitido al alertar"
-                      Foreground="{DynamicResource TextBrush}"
                       Margin="0,0,0,8" />
             <CheckBox x:Name="TopmostCheckBox"
-                      Content="Mantener la ventana siempre visible"
-                      Foreground="{DynamicResource TextBrush}" />
+                      Style="{StaticResource DarkCheckBox}"
+                      Content="Mantener la ventana siempre visible" />
         </StackPanel>
 
         <Grid Grid.Row="11">
@@ -194,14 +161,21 @@
             </Grid.ColumnDefinitions>
             <TextBlock x:Name="StatusText"
                        Foreground="{DynamicResource MutedTextBrush}"
+                       FontSize="12"
                        TextWrapping="Wrap"
                        VerticalAlignment="Center" />
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button Content="Restaurar valores iniciales"
+                        Style="{StaticResource SecondaryButton}"
+                        Margin="0,0,8,0"
                         Click="RestoreDefaultsButton_OnClick" />
                 <Button Content="Cancelar"
+                        Style="{StaticResource SecondaryButton}"
+                        Margin="0,0,8,0"
                         Click="CancelButton_OnClick" />
                 <Button Content="Guardar"
+                        Style="{StaticResource PrimaryButton}"
+                        Margin="0"
                         Click="SaveButton_OnClick" />
             </StackPanel>
         </Grid>

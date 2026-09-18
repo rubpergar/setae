@@ -3,14 +3,159 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#171A1F" />
-        <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#22262D" />
-        <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#2C323B" />
-        <SolidColorBrush x:Key="ControlBorderBrush" Color="#414956" />
-        <SolidColorBrush x:Key="TextBrush" Color="#F1F4F8" />
-        <SolidColorBrush x:Key="MutedTextBrush" Color="#AAB3C0" />
-        <SolidColorBrush x:Key="NormalBrush" Color="#51D88A" />
-        <SolidColorBrush x:Key="WarningBrush" Color="#F2B84B" />
-        <SolidColorBrush x:Key="DangerBrush" Color="#F06464" />
+        <FontFamily x:Key="UiFont">Segoe UI</FontFamily>
+
+        <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#0F141A" />
+        <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#171D25" />
+        <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#222C37" />
+        <SolidColorBrush x:Key="ControlHoverBrush" Color="#2B3847" />
+        <SolidColorBrush x:Key="ControlPressedBrush" Color="#354658" />
+        <SolidColorBrush x:Key="ControlBorderBrush" Color="#354454" />
+        <SolidColorBrush x:Key="ControlBorderStrongBrush" Color="#516376" />
+        <SolidColorBrush x:Key="TextBrush" Color="#F3F7FB" />
+        <SolidColorBrush x:Key="MutedTextBrush" Color="#9EADBD" />
+        <SolidColorBrush x:Key="DimTextBrush" Color="#718196" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#78E2B0" />
+        <SolidColorBrush x:Key="AccentHoverBrush" Color="#98ECC5" />
+        <SolidColorBrush x:Key="AccentPressedBrush" Color="#55C995" />
+        <SolidColorBrush x:Key="NormalBrush" Color="#78E2B0" />
+        <SolidColorBrush x:Key="WarningBrush" Color="#F6C76D" />
+        <SolidColorBrush x:Key="DangerBrush" Color="#FF7E8E" />
+        <SolidColorBrush x:Key="FocusBrush" Color="#80D8FF" />
+
+        <Style x:Key="FocusVisualStyle" TargetType="{x:Type Control}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border BorderBrush="{DynamicResource FocusBrush}"
+                                BorderThickness="2"
+                                CornerRadius="5"
+                                Margin="-2">
+                            <AdornedElementPlaceholder />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="FontFamily" Value="{StaticResource UiFont}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+        </Style>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
+        </Style>
+
+        <Style x:Key="SectionLabel" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="{DynamicResource MutedTextBrush}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,7" />
+        </Style>
+
+        <Style x:Key="SecondaryButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="12,7" />
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderStrongBrush}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ControlPressedBrush}" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="{x:Type Button}" BasedOn="{StaticResource SecondaryButton}">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource WindowBackgroundBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource AccentHoverBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource AccentHoverBrush}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource AccentPressedBrush}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource AccentPressedBrush}" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.45" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DarkTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="9,6" />
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource FocusBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DarkComboBoxItem" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="Padding" Value="9,7" />
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="{DynamicResource ControlPressedBrush}" />
+                    <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DarkComboBox" TargetType="{x:Type ComboBox}">
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="9,6" />
+            <Setter Property="MinHeight" Value="34" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboBoxItem}" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
+            <Style.Triggers>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource FocusBrush}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="DarkCheckBox" TargetType="{x:Type CheckBox}">
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
+        </Style>
+
+        <Style TargetType="{x:Type Slider}">
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}" />
+            <Setter Property="Height" Value="28" />
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisualStyle}" />
+        </Style>
     </Application.Resources>
 </Application>

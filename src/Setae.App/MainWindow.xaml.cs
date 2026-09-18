@@ -338,6 +338,7 @@ public partial class MainWindow : Window
                     : (MediaBrush)FindResource("NormalBrush");
         LevelFill.Fill = levelBrush;
         StatusText.Foreground = levelBrush;
+        StatusBadge.BorderBrush = levelBrush;
         StatusText.Text = GetStatusText(snapshot, level, _runtimeMonitoring.Threshold);
         NoticeText.Text = BuildNoticeText(snapshot);
         NoticeText.Foreground = snapshot.ErrorMessage is not null || _settingsNotice is not null
