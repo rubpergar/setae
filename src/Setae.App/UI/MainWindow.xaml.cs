@@ -608,8 +608,9 @@ public partial class MainWindow : Window
 
     private static bool IsOnVisibleScreen(double left, double top)
     {
-        return left < SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth
-            && top < SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight
-            && top >= SystemParameters.VirtualScreenTop;
+        return left >= SystemParameters.VirtualScreenLeft
+            && left < SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth
+            && top >= SystemParameters.VirtualScreenTop
+            && top < SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight;
     }
 }
