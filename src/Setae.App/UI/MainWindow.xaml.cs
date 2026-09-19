@@ -432,7 +432,12 @@ public partial class MainWindow : Window
 
     private void Monitor_OnAlertTriggered(object? sender, AlertTriggeredEventArgs e)
     {
-        _beepPlayer.Play();
+        if (_disposed || Dispatcher.HasShutdownStarted)
+        {
+            return;
+        }
+
+        Dispatcher.BeginInvoke(new Action(_beepPlayer.Play));
     }
 
     private void UpdateUi()
