@@ -6,6 +6,7 @@ public sealed class AudioMonitor : IDisposable
 {
     private readonly AudioDeviceService _deviceService;
     private readonly object _gate = new();
+    private readonly object _lifecycleGate = new();
     private WasapiCaptureSession? _session;
     private MonitorSnapshot _snapshot = MonitorSnapshot.Stopped();
     private int _disposed;
@@ -69,69 +70,72 @@ public sealed class AudioMonitor : IDisposable
 
     private void StartCore(string deviceId, MonitoringPreferences preferences, bool restart)
     {
-        lock (_gate)
+        lock (_lifecycleGate)
         {
+            if (Volatile.Read(ref _disposed) != 0)
+            {
+                return;
+            }
+
             if (!restart && Snapshot.IsRunning)
             {
                 return;
             }
-        }
 
-        StopCore();
+            StopCore();
 
-        WasapiCaptureSession? session = null;
+            WasapiCaptureSession? session = null;
 
-        try
-        {
-            var device = _deviceService.OpenCaptureDevice(deviceId);
-            session = new WasapiCaptureSession(
-                device,
-                preferences,
-                OnLevel,
-                OnAlert,
-                OnStopped);
-
-            lock (_gate)
+            try
             {
-                _session = session;
-            }
+                var device = _deviceService.OpenCaptureDevice(deviceId);
+                session = new WasapiCaptureSession(
+                    device,
+                    preferences,
+                    OnLevel,
+                    OnAlert,
+                    OnStopped);
 
-            session.Start();
-            PublishSnapshot(new MonitorSnapshot(true, 0f, AlertState.Normal, "Monitorizando", null));
-        }
-        catch (Exception exception)
-        {
-            session?.Dispose();
-
-            lock (_gate)
-            {
-                if (ReferenceEquals(_session, session))
+                lock (_gate)
                 {
-                    _session = null;
+                    _session = session;
                 }
-            }
 
-            var errorMessage = DescribeCaptureError(exception);
-            PublishSnapshot(MonitorSnapshot.Stopped(errorMessage) with
+                session.Start();
+                PublishSnapshot(new MonitorSnapshot(true, 0f, AlertState.Normal, null));
+            }
+            catch (Exception exception)
             {
-                ErrorMessage = errorMessage
-            });
-            throw;
+                session?.Dispose();
+
+                lock (_gate)
+                {
+                    if (ReferenceEquals(_session, session))
+                    {
+                        _session = null;
+                    }
+                }
+
+                PublishSnapshot(MonitorSnapshot.Stopped(DescribeCaptureError(exception)));
+            }
         }
     }
 
     private void StopCore()
     {
-        WasapiCaptureSession? session;
-
-        lock (_gate)
+        lock (_lifecycleGate)
         {
-            session = _session;
-            _session = null;
-            PublishSnapshot(MonitorSnapshot.Stopped());
-        }
+            WasapiCaptureSession? session;
 
-        session?.Dispose();
+            lock (_gate)
+            {
+                session = _session;
+                _session = null;
+                PublishSnapshot(MonitorSnapshot.Stopped());
+            }
+
+            session?.Dispose();
+        }
     }
 
     private void OnLevel(WasapiCaptureSession session, float level, AlertState state)
@@ -140,7 +144,7 @@ public sealed class AudioMonitor : IDisposable
         {
             if (ReferenceEquals(_session, session))
             {
-                PublishSnapshot(new MonitorSnapshot(true, level, state, "Monitorizando", null));
+                PublishSnapshot(new MonitorSnapshot(true, level, state, null));
             }
         }
     }
@@ -170,7 +174,7 @@ public sealed class AudioMonitor : IDisposable
             var errorMessage = exception is null
                 ? "La captura se detuvo. Comprueba que el micrófono siga conectado."
                 : DescribeCaptureError(exception);
-            PublishSnapshot(new MonitorSnapshot(false, 0f, AlertState.Normal, errorMessage, errorMessage));
+            PublishSnapshot(MonitorSnapshot.Stopped(errorMessage));
         }
 
         _ = Task.Run(session.Dispose);
@@ -183,10 +187,7 @@ public sealed class AudioMonitor : IDisposable
 
     private static string DescribeCaptureError(Exception exception)
     {
-        if (exception is UnauthorizedAccessException
-            || exception.HResult == unchecked((int)0x80070005)
-            || exception.Message.Contains("access", StringComparison.OrdinalIgnoreCase)
-            || exception.Message.Contains("permiso", StringComparison.OrdinalIgnoreCase))
+        if (exception is UnauthorizedAccessException || exception.HResult == unchecked((int)0x80070005))
         {
             return "Acceso al micrófono bloqueado. Revisa Configuración > Privacidad y seguridad > Micrófono.";
         }

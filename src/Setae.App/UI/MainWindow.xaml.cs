@@ -401,51 +401,29 @@ public partial class MainWindow : Window
             return;
         }
 
-        try
-        {
-            var preferences = _runtimeMonitoring with { MicrophoneId = SelectedDeviceId };
-            await _monitor.StartAsync(SelectedDeviceId, preferences);
-            _runtimeMonitoring = preferences;
-            _deviceNotice = null;
-            _settingsNotice = null;
-        }
-        catch (Exception exception)
-        {
-            SetNotice(DescribeStartError(exception), isError: true);
-        }
-
+        var preferences = _runtimeMonitoring with { MicrophoneId = SelectedDeviceId };
+        await _monitor.StartAsync(SelectedDeviceId, preferences);
+        _runtimeMonitoring = preferences;
+        _deviceNotice = null;
+        _settingsNotice = null;
+        _uiTimer.Start();
         UpdateUi();
     }
 
     private async Task StopMonitoringAsync()
     {
-        try
-        {
-            await _monitor.StopAsync();
-        }
-        catch (Exception exception)
-        {
-            SetNotice($"No se pudo detener la monitorización: {exception.Message}", isError: true);
-        }
-
+        await _monitor.StopAsync();
         UpdateUi();
     }
 
     private async Task RestartMonitoringAsync()
     {
-        try
-        {
-            var preferences = _runtimeMonitoring with { MicrophoneId = SelectedDeviceId };
-            await _monitor.RestartAsync(SelectedDeviceId!, preferences);
-            _runtimeMonitoring = preferences;
-            _deviceNotice = null;
-            _settingsNotice = null;
-        }
-        catch (Exception exception)
-        {
-            SetNotice(DescribeStartError(exception), isError: true);
-        }
-
+        var preferences = _runtimeMonitoring with { MicrophoneId = SelectedDeviceId };
+        await _monitor.RestartAsync(SelectedDeviceId!, preferences);
+        _runtimeMonitoring = preferences;
+        _deviceNotice = null;
+        _settingsNotice = null;
+        _uiTimer.Start();
         UpdateUi();
     }
 
@@ -620,18 +598,5 @@ public partial class MainWindow : Window
         return left < SystemParameters.VirtualScreenLeft + SystemParameters.VirtualScreenWidth
             && top < SystemParameters.VirtualScreenTop + SystemParameters.VirtualScreenHeight
             && top >= SystemParameters.VirtualScreenTop;
-    }
-
-    private static string DescribeStartError(Exception exception)
-    {
-        if (exception is UnauthorizedAccessException
-            || exception.HResult == unchecked((int)0x80070005)
-            || exception.Message.Contains("access", StringComparison.OrdinalIgnoreCase)
-            || exception.Message.Contains("permiso", StringComparison.OrdinalIgnoreCase))
-        {
-            return "Acceso al micrófono bloqueado. Revisa Configuración > Privacidad y seguridad > Micrófono.";
-        }
-
-        return $"No se pudo iniciar la monitorización: {exception.Message} Comprueba que el micrófono siga conectado y vuelve a intentarlo.";
     }
 }
