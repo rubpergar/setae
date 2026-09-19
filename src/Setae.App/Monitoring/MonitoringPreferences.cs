@@ -1,13 +1,15 @@
-namespace Setae.Core;
+using Setae.App.Audio;
+
+namespace Setae.App.Monitoring;
 
 /// <summary>
 /// User-configurable values used by the monitor and alert detector.
 /// </summary>
 public sealed record MonitoringPreferences
 {
-    public const float DefaultThreshold = 70f;
-    public static readonly TimeSpan DefaultMinimumAlertDuration = TimeSpan.FromMilliseconds(500);
-    public static readonly TimeSpan DefaultCooldown = TimeSpan.FromSeconds(3);
+    public const float DefaultThreshold = 50f;
+    public static readonly TimeSpan DefaultMinimumAlertDuration = TimeSpan.FromMilliseconds(250);
+    public static readonly TimeSpan DefaultCooldown = TimeSpan.FromSeconds(2);
 
     public string? MicrophoneId { get; init; }
     public float Threshold { get; init; } = DefaultThreshold;

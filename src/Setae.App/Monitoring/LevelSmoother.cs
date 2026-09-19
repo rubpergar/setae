@@ -1,4 +1,6 @@
-namespace Setae.Core;
+using Setae.App.Audio;
+
+namespace Setae.App.Monitoring;
 
 /// <summary>
 /// Smooths a relative level with independent attack and release speeds.

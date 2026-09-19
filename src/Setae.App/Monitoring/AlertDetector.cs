@@ -1,4 +1,6 @@
-namespace Setae.Core;
+using Setae.App.Audio;
+
+namespace Setae.App.Monitoring;
 
 public enum AlertState
 {

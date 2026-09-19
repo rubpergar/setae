@@ -1,7 +1,7 @@
 using NAudio.CoreAudioApi;
 using System.Runtime.InteropServices;
 
-namespace Setae.App;
+namespace Setae.App.Audio;
 
 public sealed class AudioDeviceService
 {

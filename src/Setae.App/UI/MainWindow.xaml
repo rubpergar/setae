@@ -1,0 +1,274 @@
+<Window x:Class="Setae.App.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Setae"
+        Width="380"
+        SizeToContent="Height"
+        MinWidth="360"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="Manual"
+        Background="{DynamicResource WindowBackgroundBrush}"
+        Foreground="{DynamicResource TextBrush}"
+        UseLayoutRounding="True"
+        Closing="Window_OnClosing">
+    <Grid Margin="20,18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="MeterArea" Margin="0,0,0,6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="46" />
+            </Grid.RowDefinitions>
+            <TextBlock x:Name="ThresholdText"
+                       Text="Umbral 50"
+                       Foreground="{DynamicResource MutedTextBrush}"
+                       FontSize="11"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,0,4" />
+            <Grid x:Name="MeterBar" Grid.Row="1">
+                <Border Background="{DynamicResource PanelBackgroundBrush}"
+                        BorderBrush="{DynamicResource ControlBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        ClipToBounds="True" />
+                <Rectangle x:Name="LevelFill"
+                           HorizontalAlignment="Left"
+                           Fill="{DynamicResource InactiveFillBrush}"
+                           RadiusX="3"
+                           RadiusY="3"
+                           Width="0" />
+                <Border x:Name="ThresholdMarker"
+                        Width="2"
+                        HorizontalAlignment="Left"
+                        Background="{DynamicResource TextBrush}"
+                        CornerRadius="1"
+                        Margin="0,3,0,3"
+                        ToolTip="Umbral" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="1,0,1,14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="0"
+                       Foreground="{DynamicResource DimTextBrush}"
+                       FontSize="11" />
+            <TextBlock Grid.Column="1"
+                       Text="100"
+                       Foreground="{DynamicResource DimTextBrush}"
+                       FontSize="11"
+                       HorizontalAlignment="Right" />
+        </Grid>
+
+        <Border x:Name="StatusBadge"
+                Grid.Row="2"
+                Background="{DynamicResource PanelBackgroundBrush}"
+                BorderBrush="{DynamicResource ControlBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="9,5"
+                HorizontalAlignment="Left"
+                Margin="0,0,0,10">
+            <TextBlock x:Name="StatusText"
+                       Text="Detenido"
+                       FontWeight="SemiBold"
+                       TextWrapping="NoWrap" />
+        </Border>
+
+        <TextBlock x:Name="NoticeText"
+                   Grid.Row="3"
+                   Foreground="{DynamicResource MutedTextBrush}"
+                   FontSize="12"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,8"
+                   Visibility="Collapsed" />
+
+        <StackPanel Grid.Row="4"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <Button x:Name="SettingsButton"
+                    Style="{StaticResource SecondaryButton}"
+                    Content="Ajustes"
+                    Margin="0,0,8,0"
+                    Click="SettingsButton_OnClick" />
+            <Button x:Name="StartStopButton"
+                    Style="{StaticResource PrimaryButton}"
+                    Content="Iniciar"
+                    Click="StartStopButton_OnClick" />
+        </StackPanel>
+
+        <StackPanel x:Name="SettingsPanel"
+                    Grid.Row="5"
+                    Margin="0,16,0,0"
+                    Visibility="Collapsed">
+            <Border Background="{DynamicResource PanelBackgroundBrush}"
+                    BorderBrush="{DynamicResource ControlBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="14,12">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionLabel}"
+                               Text="Micrófono de entrada" />
+                    <ComboBox x:Name="MicrophoneComboBox"
+                              Style="{StaticResource DarkComboBox}"
+                              SelectedValuePath="Id"
+                              ToolTip="Micrófono que se analizará"
+                              Margin="0,0,0,16"
+                              SelectionChanged="MicrophoneComboBox_OnSelectionChanged" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <TextBlock Style="{StaticResource SectionLabel}"
+                                   Margin="0"
+                                   Text="Umbral" />
+                        <Border Style="{StaticResource InfoIcon}"
+                                Margin="6,0,0,0"
+                                VerticalAlignment="Center"
+                                ToolTip="Nivel a partir del cual se considera que hablas demasiado alto. Escala de 0 a 100.">
+                            <TextBlock Text="i"
+                                       Foreground="{DynamicResource MutedTextBrush}"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Slider x:Name="ThresholdSlider"
+                                Minimum="0"
+                                Maximum="100"
+                                TickFrequency="5"
+                                IsSnapToTickEnabled="False"
+                                ValueChanged="ThresholdSlider_OnValueChanged" />
+                        <TextBlock x:Name="ThresholdValueText"
+                                   Grid.Column="1"
+                                   Text="50"
+                                   FontWeight="SemiBold"
+                                   Foreground="{DynamicResource AccentBrush}"
+                                   MinWidth="32"
+                                   TextAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Margin="12,0,0,0" />
+                    </Grid>
+
+                    <Grid Margin="0,0,0,16">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Style="{StaticResource SectionLabel}"
+                                       Margin="0"
+                                       Text="Histéresis" />
+                            <Border Style="{StaticResource InfoIcon}"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    ToolTip="Tiempo mínimo que el nivel debe permanecer sobre el umbral para activar la alerta. Evita falsos avisos por picos muy breves.">
+                                <TextBlock Text="i"
+                                           Foreground="{DynamicResource MutedTextBrush}"
+                                           FontSize="10"
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="12,0,0,8">
+                            <TextBlock Style="{StaticResource SectionLabel}"
+                                       Margin="0"
+                                       Text="Enfriamiento" />
+                            <Border Style="{StaticResource InfoIcon}"
+                                    Margin="6,0,0,0"
+                                    VerticalAlignment="Center"
+                                    ToolTip="Tiempo de espera entre alertas para evitar avisos continuos. Poner 0 elimina la espera.">
+                                <TextBlock Text="i"
+                                           Foreground="{DynamicResource MutedTextBrush}"
+                                           FontSize="10"
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                            </Border>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1" Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="HysteresisTextBox"
+                                     Style="{StaticResource DarkTextBox}"
+                                     TextChanged="HysteresisTextBox_OnTextChanged"
+                                     LostFocus="HysteresisTextBox_OnLostFocus"
+                                     KeyDown="HysteresisTextBox_OnKeyDown" />
+                            <TextBlock Grid.Column="1"
+                                       Text="ms"
+                                       Foreground="{DynamicResource MutedTextBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0" />
+                        </Grid>
+                        <Grid Grid.Row="1" Grid.Column="1" Margin="12,0,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="CooldownTextBox"
+                                     Style="{StaticResource DarkTextBox}"
+                                     TextChanged="CooldownTextBox_OnTextChanged"
+                                     LostFocus="CooldownTextBox_OnLostFocus"
+                                     KeyDown="CooldownTextBox_OnKeyDown" />
+                            <TextBlock Grid.Column="1"
+                                       Text="s"
+                                       Foreground="{DynamicResource MutedTextBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="8,0,0,0" />
+                        </Grid>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <CheckBox x:Name="BeepCheckBox"
+                                  Style="{StaticResource DarkCheckBox}"
+                                  Content="Pitido de alerta"
+                                  Checked="BeepCheckBox_OnToggled"
+                                  Unchecked="BeepCheckBox_OnToggled" />
+                        <CheckBox x:Name="TopmostCheckBox"
+                                  Style="{StaticResource DarkCheckBox}"
+                                  Content="Siempre visible"
+                                  Margin="18,0,0,0"
+                                  Checked="TopmostCheckBox_OnToggled"
+                                  Unchecked="TopmostCheckBox_OnToggled" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Button Style="{StaticResource SecondaryButton}"
+                                Content="Restaurar valores iniciales"
+                                Click="RestoreDefaultsButton_OnClick" />
+                        <TextBlock x:Name="RestoreNoticeText"
+                                   Text="Valores restaurados"
+                                   Foreground="{DynamicResource AccentBrush}"
+                                   FontSize="12"
+                                   VerticalAlignment="Center"
+                                   Margin="10,0,0,0"
+                                   Visibility="Collapsed" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

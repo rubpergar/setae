@@ -1,9 +1,9 @@
 using System.Text;
 using System.Text.Json;
 using System.IO;
-using Setae.Core;
+using Setae.App.Monitoring;
 
-namespace Setae.App;
+namespace Setae.App.Infrastructure;
 
 public sealed class SettingsStore
 {

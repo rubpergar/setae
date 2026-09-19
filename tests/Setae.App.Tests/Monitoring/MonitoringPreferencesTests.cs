@@ -1,6 +1,6 @@
-using Setae.Core;
+using Setae.App.Monitoring;
 
-namespace Setae.Core.Tests;
+namespace Setae.App.Tests;
 
 public class MonitoringPreferencesTests
 {
@@ -9,9 +9,9 @@ public class MonitoringPreferencesTests
     {
         var defaults = MonitoringPreferences.Defaults;
 
-        Assert.Equal(70f, defaults.Threshold);
-        Assert.Equal(TimeSpan.FromMilliseconds(500), defaults.MinimumAlertDuration);
-        Assert.Equal(TimeSpan.FromSeconds(3), defaults.Cooldown);
+        Assert.Equal(50f, defaults.Threshold);
+        Assert.Equal(TimeSpan.FromMilliseconds(250), defaults.MinimumAlertDuration);
+        Assert.Equal(TimeSpan.FromSeconds(2), defaults.Cooldown);
         Assert.True(defaults.BeepEnabled);
     }
 

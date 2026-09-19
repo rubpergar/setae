@@ -1,6 +1,4 @@
-using Setae.Core;
-
-namespace Setae.App;
+namespace Setae.App.Monitoring;
 
 public sealed record MonitorSnapshot(
     bool IsRunning,

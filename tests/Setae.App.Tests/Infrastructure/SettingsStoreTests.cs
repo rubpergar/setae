@@ -1,5 +1,6 @@
 using System.Text.Json;
-using Setae.Core;
+using Setae.App.Infrastructure;
+using Setae.App.Monitoring;
 
 namespace Setae.App.Tests;
 

@@ -1,4 +1,4 @@
-namespace Setae.App;
+namespace Setae.App.Audio;
 
 public sealed record AudioDeviceInfo(string Id, string Name)
 {

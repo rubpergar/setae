@@ -1,6 +1,6 @@
-using Setae.Core;
+using Setae.App.Monitoring;
 
-namespace Setae.Core.Tests;
+namespace Setae.App.Tests;
 
 public class AlertDetectorTests
 {
