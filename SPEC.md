@@ -133,7 +133,7 @@ No se normalizará automáticamente según los máximos observados. El valor del
 
 ## 7. Umbral y estados
 
-- Umbral inicial: 70 sobre 100.
+- Umbral inicial: 50 sobre 100.
 - El usuario podrá modificarlo manualmente.
 - El estado verde indicará nivel normal.
 - El estado ámbar comenzará automáticamente 10 puntos por debajo del umbral.
@@ -153,9 +153,9 @@ La lógica de alerta tendrá estos estados conceptuales:
 
 Reglas:
 
-- Duración mínima inicial: 500 ms.
+- Duración mínima inicial: 250 ms.
 - Rango configurable de duración: 100 ms a 3 s.
-- Enfriamiento inicial: 3 s.
+- Enfriamiento inicial: 2 s.
 - Rango configurable de enfriamiento: 0 a 30 s.
 - Si el nivel baja antes de completar la duración mínima, se reinicia el contador pendiente.
 - Al completar la duración mínima, se emite un único pitido si el sonido está activado.
