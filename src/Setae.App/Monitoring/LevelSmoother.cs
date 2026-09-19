@@ -31,7 +31,7 @@ public sealed class LevelSmoother
         _fallPerSecond = fallPerSecond;
     }
 
-    public float Current { get; private set; }
+    private float Current { get; set; }
 
     /// <summary>
     /// Moves toward the target by a time-scaled amount and clamps to the target.
@@ -58,12 +58,6 @@ public sealed class LevelSmoother
             : MathF.Max(target, Current - distance);
 
         return Current;
-    }
-
-    public void Reset(float level = 0f)
-    {
-        ValidateLevel(level);
-        Current = level;
     }
 
     private static void ValidateLevel(float level)

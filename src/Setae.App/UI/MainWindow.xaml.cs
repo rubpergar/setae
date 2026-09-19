@@ -26,11 +26,8 @@ public partial class MainWindow : Window
     private readonly MediaBrush _warningFillBrush;
     private readonly MediaBrush _dangerFillBrush;
     private readonly MediaBrush _inactiveFillBrush;
-    private readonly MediaBrush _normalBrush;
-    private readonly MediaBrush _warningBrush;
     private readonly MediaBrush _dangerBrush;
     private readonly MediaBrush _mutedBrush;
-    private readonly MediaBrush _dangerTextBrush;
 
     private AppSettings _settings;
     private MonitoringPreferences _runtimeMonitoring;
@@ -64,11 +61,8 @@ public partial class MainWindow : Window
         _warningFillBrush = (MediaBrush)FindResource("WarningFillBrush");
         _dangerFillBrush = (MediaBrush)FindResource("DangerFillBrush");
         _inactiveFillBrush = (MediaBrush)FindResource("InactiveFillBrush");
-        _normalBrush = (MediaBrush)FindResource("NormalBrush");
-        _warningBrush = (MediaBrush)FindResource("WarningBrush");
         _dangerBrush = (MediaBrush)FindResource("DangerBrush");
         _mutedBrush = (MediaBrush)FindResource("MutedTextBrush");
-        _dangerTextBrush = (MediaBrush)FindResource("DangerBrush");
 
         _uiTimer = new DispatcherTimer(DispatcherPriority.Background, Dispatcher)
         {
@@ -478,7 +472,7 @@ public partial class MainWindow : Window
             ? Visibility.Collapsed
             : Visibility.Visible;
         NoticeText.Foreground = snapshot.ErrorMessage is not null || _settingsNotice is not null
-            ? _dangerTextBrush
+            ? _dangerBrush
             : _mutedBrush;
 
         var meterWidth = Math.Max(0, MeterBar.ActualWidth);

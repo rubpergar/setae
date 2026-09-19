@@ -46,8 +46,6 @@ public sealed class AlertDetector
 
     public AlertState State { get; private set; } = AlertState.Normal;
 
-    public event EventHandler<AlertTriggeredEventArgs>? AlertTriggered;
-
     /// <summary>
     /// Processes one smoothed level and returns true exactly when it triggers an event.
     /// </summary>
@@ -79,7 +77,6 @@ public sealed class AlertDetector
         if (_requiresRearm)
         {
             State = AlertState.Alerted;
-            _pendingDuration = TimeSpan.Zero;
             return false;
         }
 
@@ -107,16 +104,7 @@ public sealed class AlertDetector
         _cooldownRemaining = _cooldown;
         State = _cooldown > TimeSpan.Zero ? AlertState.Cooldown : AlertState.Alerted;
 
-        AlertTriggered?.Invoke(this, new AlertTriggeredEventArgs(relativeLevel));
         return true;
-    }
-
-    public void Reset()
-    {
-        _pendingDuration = TimeSpan.Zero;
-        _cooldownRemaining = TimeSpan.Zero;
-        _requiresRearm = false;
-        State = AlertState.Normal;
     }
 
     private static void ValidateInput(float relativeLevel, TimeSpan elapsed)

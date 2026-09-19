@@ -37,14 +37,4 @@ public class MonitoringPreferencesTests
         Assert.False(MonitoringPreferencesValidator.IsValid(
             MonitoringPreferences.Defaults with { MicrophoneId = " " }));
     }
-
-    [Fact]
-    public void RestoreDefaultsIfInvalid_ReturnsDefaults()
-    {
-        var invalid = MonitoringPreferences.Defaults with { Threshold = float.NaN };
-
-        var restored = MonitoringPreferencesValidator.RestoreDefaultsIfInvalid(invalid);
-
-        Assert.Equal(MonitoringPreferences.Defaults, restored);
-    }
 }

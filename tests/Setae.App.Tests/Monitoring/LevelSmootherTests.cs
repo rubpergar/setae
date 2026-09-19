@@ -12,7 +12,6 @@ public class LevelSmootherTests
         var result = smoother.Update(80f, TimeSpan.FromMilliseconds(500));
 
         Assert.Equal(50f, result);
-        Assert.Equal(50f, smoother.Current);
     }
 
     [Fact]
@@ -24,15 +23,5 @@ public class LevelSmootherTests
         var result = smoother.Update(0f, TimeSpan.FromMilliseconds(500));
 
         Assert.Equal(90f, result);
-    }
-
-    [Fact]
-    public void Reset_SetsTheCurrentLevel()
-    {
-        var smoother = new LevelSmoother();
-
-        smoother.Reset(42f);
-
-        Assert.Equal(42f, smoother.Current);
     }
 }

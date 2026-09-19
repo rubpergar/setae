@@ -76,9 +76,4 @@ public static class MonitoringPreferencesValidator
             throw new ArgumentOutOfRangeException(nameof(preferences), "El enfriamiento debe estar entre 0 y 30 s.");
         }
     }
-
-    public static MonitoringPreferences RestoreDefaultsIfInvalid(MonitoringPreferences? preferences)
-    {
-        return IsValid(preferences) ? preferences! : MonitoringPreferences.Defaults;
-    }
 }
