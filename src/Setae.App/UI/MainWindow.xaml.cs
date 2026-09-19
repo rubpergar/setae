@@ -73,6 +73,7 @@ public partial class MainWindow : Window
         Topmost = settings.Topmost;
         ApplySavedWindowLayout(settings);
         Loaded += Window_OnLoaded;
+        SizeChanged += Window_OnSizeChanged;
     }
 
     public void DisposeForApplicationExit()
@@ -94,7 +95,11 @@ public partial class MainWindow : Window
     {
         LoadPreferencesIntoUi();
         RefreshDevices();
-        _uiTimer.Start();
+        UpdateUi();
+    }
+
+    private void Window_OnSizeChanged(object sender, SizeChangedEventArgs e)
+    {
         UpdateUi();
     }
 
@@ -215,17 +220,7 @@ public partial class MainWindow : Window
 
     private void RestoreDefaultsButton_OnClick(object sender, RoutedEventArgs e)
     {
-        var defaults = MonitoringPreferences.Defaults;
-
-        _loadingUi = true;
-        ThresholdSlider.Value = defaults.Threshold;
-        HysteresisTextBox.Text = ((int)defaults.MinimumAlertDuration.TotalMilliseconds)
-            .ToString(CultureInfo.InvariantCulture);
-        CooldownTextBox.Text = defaults.Cooldown.TotalSeconds
-            .ToString("0.##", CultureInfo.InvariantCulture);
-        BeepCheckBox.IsChecked = defaults.BeepEnabled;
-        _loadingUi = false;
-
+        ApplyPreferencesToControls(MonitoringPreferences.Defaults);
         ApplySettingsFromUi();
         ShowRestoreNotice();
     }
@@ -246,14 +241,22 @@ public partial class MainWindow : Window
 
     private void LoadPreferencesIntoUi()
     {
+        ApplyPreferencesToControls(_runtimeMonitoring);
+
         _loadingUi = true;
-        ThresholdSlider.Value = _runtimeMonitoring.Threshold;
-        HysteresisTextBox.Text = ((int)_runtimeMonitoring.MinimumAlertDuration.TotalMilliseconds)
-            .ToString(CultureInfo.InvariantCulture);
-        CooldownTextBox.Text = _runtimeMonitoring.Cooldown.TotalSeconds
-            .ToString("0.##", CultureInfo.InvariantCulture);
-        BeepCheckBox.IsChecked = _runtimeMonitoring.BeepEnabled;
         TopmostCheckBox.IsChecked = _settings.Topmost;
+        _loadingUi = false;
+    }
+
+    private void ApplyPreferencesToControls(MonitoringPreferences preferences)
+    {
+        _loadingUi = true;
+        ThresholdSlider.Value = preferences.Threshold;
+        HysteresisTextBox.Text = ((int)preferences.MinimumAlertDuration.TotalMilliseconds)
+            .ToString(CultureInfo.InvariantCulture);
+        CooldownTextBox.Text = preferences.Cooldown.TotalSeconds
+            .ToString("0.##", CultureInfo.InvariantCulture);
+        BeepCheckBox.IsChecked = preferences.BeepEnabled;
         _loadingUi = false;
     }
 
@@ -435,6 +438,12 @@ public partial class MainWindow : Window
     private void UpdateUi()
     {
         var snapshot = _monitor.Snapshot;
+
+        if (!snapshot.IsRunning)
+        {
+            _uiTimer.Stop();
+        }
+
         var level = Math.Clamp(snapshot.Level, 0f, 100f);
         var threshold = _runtimeMonitoring.Threshold;
         ThresholdText.Text = $"Umbral {threshold:0}";
@@ -458,7 +467,6 @@ public partial class MainWindow : Window
         LevelFill.Width = meterWidth * level / 100d;
         ThresholdMarker.Margin = new Thickness(markerX, 0, 0, 0);
 
-        ThresholdText.Text = $"Umbral {threshold:0}";
         var labelWidth = Math.Max(0, ThresholdText.ActualWidth);
         var labelX = Math.Clamp(markerX + 1d - labelWidth / 2d, 0d, Math.Max(0d, meterWidth - labelWidth));
         ThresholdText.Margin = new Thickness(labelX, 0, 0, 4);
