@@ -69,17 +69,23 @@ jobs:
           "$hash  $(Split-Path $zip -Leaf)" | Set-Content -Path $hashFile -Encoding ascii
 
           @"
-          ## Portable Windows release
+          ## Download
 
-          Download `Setae-$env:GITHUB_REF_NAME-win-x64.zip` and extract it before running `Setae.App.exe`.
+          1. Download `Setae-$env:GITHUB_REF_NAME-win-x64.zip`.
+          2. Extract it.
+          3. Run `Setae.App.exe`.
 
-          - Windows 10/11 x64
-          - Self-contained single-file executable
-          - No .NET installation or administrator privileges required
-          - SHA-256: see the `.sha256` asset
-          - Source commit: `$env:GITHUB_SHA`
+          The portable build targets Windows 10/11 x64 and does not require a .NET installation or administrator privileges.
 
-          This release is not Authenticode-signed yet. Windows SmartScreen may show an Unknown publisher warning. Verify the SHA-256 value and review the source commit before running the executable.
+          ## Changes
+
+          See the [changelog](https://github.com/$env:GITHUB_REPOSITORY/blob/main/CHANGELOG.md) for changes since the previous release.
+
+          ## Privacy and security
+
+          Setae processes microphone levels locally. It does not record audio, recognize speech, collect telemetry, or make runtime network requests.
+
+          This release is not Authenticode-signed yet. Windows SmartScreen may show an Unknown publisher warning. Verify the SHA-256 value from the `.sha256` asset before running the executable.
           "@ | Set-Content -Path $notesFile -Encoding utf8
 
           "ZIP=$zip" >> $env:GITHUB_ENV
