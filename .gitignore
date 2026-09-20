@@ -4,3 +4,5 @@
 *.user
 publish/
 artifacts/
+.playwright-mcp/
+*.lnk
