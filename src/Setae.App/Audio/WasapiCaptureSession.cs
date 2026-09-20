@@ -50,7 +50,7 @@ internal sealed class WasapiCaptureSession : IDisposable
             if (!SampleLevelConverter.IsSupported(_waveFormat))
             {
                 throw new NotSupportedException(
-                    $"El formato de captura del micrófono no está soportado: {_waveFormat.Encoding}, {_waveFormat.BitsPerSample} bits.");
+                    $"The microphone capture format is not supported: {_waveFormat.Encoding}, {_waveFormat.BitsPerSample} bits.");
             }
 
             _levelHandler = levelHandler;
@@ -103,7 +103,7 @@ internal sealed class WasapiCaptureSession : IDisposable
         }
         catch
         {
-            // La captura puede haberse detenido porque el dispositivo desapareció.
+            // Capture may have stopped because the device disappeared.
         }
 
         try
@@ -112,7 +112,7 @@ internal sealed class WasapiCaptureSession : IDisposable
         }
         catch
         {
-            // La limpieza continúa liberando el dispositivo.
+            // Continue cleanup by releasing the device.
         }
 
         DisposeDeviceQuietly(_device);
@@ -136,7 +136,7 @@ internal sealed class WasapiCaptureSession : IDisposable
         }
         catch
         {
-            // Un buffer inválido no debe detener la monitorización.
+            // An invalid buffer must not stop monitoring.
             return;
         }
 
@@ -190,7 +190,7 @@ internal sealed class WasapiCaptureSession : IDisposable
         }
         catch
         {
-            // Se continúa liberando el dispositivo.
+            // Continue releasing the device.
         }
 
         DisposeDeviceQuietly(_device);
@@ -204,7 +204,7 @@ internal sealed class WasapiCaptureSession : IDisposable
         }
         catch
         {
-            // No queda otro recurso que liberar.
+            // No other resources remain to release.
         }
     }
 }

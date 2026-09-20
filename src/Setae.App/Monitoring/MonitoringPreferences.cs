@@ -55,25 +55,25 @@ public static class MonitoringPreferencesValidator
 
         if (preferences.MicrophoneId is not null && string.IsNullOrWhiteSpace(preferences.MicrophoneId))
         {
-            throw new ArgumentException("El identificador del micrófono no puede estar vacío.", nameof(preferences));
+            throw new ArgumentException("The microphone identifier cannot be empty.", nameof(preferences));
         }
 
         if (!float.IsFinite(preferences.Threshold)
             || preferences.Threshold < MinimumThreshold
             || preferences.Threshold > MaximumThreshold)
         {
-            throw new ArgumentOutOfRangeException(nameof(preferences), "El umbral debe estar entre 0 y 100.");
+            throw new ArgumentOutOfRangeException(nameof(preferences), "The threshold must be between 0 and 100.");
         }
 
         if (preferences.MinimumAlertDuration < MinimumAlertDuration
             || preferences.MinimumAlertDuration > MaximumAlertDuration)
         {
-            throw new ArgumentOutOfRangeException(nameof(preferences), "La duración mínima debe estar entre 100 ms y 3 s.");
+            throw new ArgumentOutOfRangeException(nameof(preferences), "The minimum duration must be between 100 ms and 3 s.");
         }
 
         if (preferences.Cooldown < MinimumCooldown || preferences.Cooldown > MaximumCooldown)
         {
-            throw new ArgumentOutOfRangeException(nameof(preferences), "El enfriamiento debe estar entre 0 y 30 s.");
+            throw new ArgumentOutOfRangeException(nameof(preferences), "Cooldown must be between 0 and 30 s.");
         }
     }
 }

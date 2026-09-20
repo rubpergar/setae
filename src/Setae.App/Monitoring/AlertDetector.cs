@@ -113,7 +113,7 @@ public sealed class AlertDetector
             || relativeLevel < AudioLevel.MinimumRelativeLevel
             || relativeLevel > AudioLevel.MaximumRelativeLevel)
         {
-            throw new ArgumentOutOfRangeException(nameof(relativeLevel), "El nivel relativo debe estar entre 0 y 100.");
+            throw new ArgumentOutOfRangeException(nameof(relativeLevel), "The relative level must be between 0 and 100.");
         }
 
         if (elapsed < TimeSpan.Zero)

@@ -64,7 +64,7 @@ public sealed class AudioMonitor : IDisposable
 
         if (string.IsNullOrWhiteSpace(deviceId))
         {
-            throw new ArgumentException("Selecciona un micrófono antes de iniciar.", nameof(deviceId));
+            throw new ArgumentException("Select a microphone before starting.", nameof(deviceId));
         }
     }
 
@@ -172,7 +172,7 @@ public sealed class AudioMonitor : IDisposable
 
             _session = null;
             var errorMessage = exception is null
-                ? "La captura se detuvo. Comprueba que el micrófono siga conectado."
+                ? "Capture stopped. Check that the microphone is still connected."
                 : DescribeCaptureError(exception);
             PublishSnapshot(MonitorSnapshot.Stopped(errorMessage));
         }
@@ -189,9 +189,9 @@ public sealed class AudioMonitor : IDisposable
     {
         if (exception is UnauthorizedAccessException || exception.HResult == unchecked((int)0x80070005))
         {
-            return "Acceso al micrófono bloqueado. Revisa Configuración > Privacidad y seguridad > Micrófono.";
+            return "Microphone access is blocked. Check Settings > Privacy & security > Microphone.";
         }
 
-        return $"No se pudo iniciar o mantener la captura: {exception.Message} Comprueba que el micrófono siga conectado y vuelve a intentarlo.";
+        return $"Capture could not start or continue: {exception.Message} Check that the microphone is connected and try again.";
     }
 }

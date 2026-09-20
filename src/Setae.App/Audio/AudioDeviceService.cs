@@ -48,7 +48,7 @@ public sealed class AudioDeviceService
     {
         if (string.IsNullOrWhiteSpace(deviceId))
         {
-            throw new ArgumentException("El identificador del micrófono no puede estar vacío.", nameof(deviceId));
+            throw new ArgumentException("The microphone identifier cannot be empty.", nameof(deviceId));
         }
 
         var enumerator = new MMDeviceEnumerator();

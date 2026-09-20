@@ -9,8 +9,8 @@ internal static class SampleLevelConverter
     private static readonly Guid IeeeFloatSubFormat = new("00000003-0000-0010-8000-00AA00389B71");
 
     /// <summary>
-    /// Determina si el formato lo emite WASAPI en modo compartido para micrófonos habituales:
-    /// IEEE float de 32 bits o PCM de 16 bits.
+    /// Determines whether shared-mode WASAPI emits a common microphone format:
+    /// 32-bit IEEE float or 16-bit PCM.
     /// </summary>
     public static bool IsSupported(WaveFormat format)
     {
@@ -27,8 +27,8 @@ internal static class SampleLevelConverter
     }
 
     /// <summary>
-    /// Calcula el nivel relativo (0..100) del buffer aplicando RMS sobre todas las muestras y todos los canales.
-    /// Las muestras se descartan al terminar; no se retiene ni copia el audio.
+    /// Calculates the buffer's relative level (0..100) using RMS across all samples and channels.
+    /// The samples are not retained or copied after calculation.
     /// </summary>
     public static float ToRelativeLevel(ReadOnlySpan<byte> audioBytes, int bytesRecorded, WaveFormat format)
     {
@@ -40,7 +40,7 @@ internal static class SampleLevelConverter
         if (!IsSupported(format))
         {
             throw new NotSupportedException(
-                $"El formato de captura no está soportado: {format.Encoding}, {format.BitsPerSample} bits.");
+                $"The capture format is not supported: {format.Encoding}, {format.BitsPerSample} bits.");
         }
 
         var bytesPerSample = format.BitsPerSample / 8;

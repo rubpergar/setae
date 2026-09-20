@@ -26,7 +26,7 @@ public sealed class SettingsStore
     {
         if (string.IsNullOrWhiteSpace(directoryPath))
         {
-            throw new ArgumentException("La carpeta de ajustes no puede estar vacía.", nameof(directoryPath));
+            throw new ArgumentException("The settings folder cannot be empty.", nameof(directoryPath));
         }
 
         _directoryPath = directoryPath;
@@ -51,7 +51,7 @@ public sealed class SettingsStore
             {
                 return new SettingsLoadResult(
                     AppSettings.Defaults,
-                    "Los ajustes guardados no son válidos. Se han restaurado los valores iniciales.");
+                    "The saved settings are invalid. Defaults have been restored.");
             }
 
             return new SettingsLoadResult(settings!, null);
@@ -60,7 +60,7 @@ public sealed class SettingsStore
         {
             return new SettingsLoadResult(
                 AppSettings.Defaults,
-                $"No se pudieron cargar los ajustes. Se usarán los valores iniciales. ({exception.Message})");
+                $"The settings could not be loaded. Defaults will be used. ({exception.Message})");
         }
     }
 

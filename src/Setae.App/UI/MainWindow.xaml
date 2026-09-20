@@ -27,7 +27,7 @@
                 <RowDefinition Height="46" />
             </Grid.RowDefinitions>
             <TextBlock x:Name="ThresholdText"
-                       Text="Umbral 50"
+                       Text="Threshold 50"
                        Foreground="{DynamicResource MutedTextBrush}"
                        FontSize="11"
                        FontWeight="SemiBold"
@@ -51,7 +51,7 @@
                         Background="{DynamicResource TextBrush}"
                         CornerRadius="1"
                         Margin="0,3,0,3"
-                        ToolTip="Umbral" />
+                         ToolTip="Threshold" />
             </Grid>
         </Grid>
 
@@ -80,7 +80,7 @@
                 HorizontalAlignment="Left"
                 Margin="0,0,0,10">
             <TextBlock x:Name="StatusText"
-                       Text="Detenido"
+                       Text="Stopped"
                        FontWeight="SemiBold"
                        TextWrapping="NoWrap" />
         </Border>
@@ -98,12 +98,12 @@
                     HorizontalAlignment="Right">
             <Button x:Name="SettingsButton"
                     Style="{StaticResource SecondaryButton}"
-                    Content="Ajustes"
+                     Content="Settings"
                     Margin="0,0,8,0"
                     Click="SettingsButton_OnClick" />
             <Button x:Name="StartStopButton"
                     Style="{StaticResource PrimaryButton}"
-                    Content="Iniciar"
+                     Content="Start"
                     Click="StartStopButton_OnClick" />
         </StackPanel>
 
@@ -118,22 +118,22 @@
                     Padding="14,12">
                 <StackPanel>
                     <TextBlock Style="{StaticResource SectionLabel}"
-                               Text="Micrófono de entrada" />
+                                Text="Input microphone" />
                     <ComboBox x:Name="MicrophoneComboBox"
                               Style="{StaticResource DarkComboBox}"
                               SelectedValuePath="Id"
-                              ToolTip="Micrófono que se analizará"
+                               ToolTip="Microphone to monitor"
                               Margin="0,0,0,16"
                               SelectionChanged="MicrophoneComboBox_OnSelectionChanged" />
 
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <TextBlock Style="{StaticResource SectionLabel}"
                                    Margin="0"
-                                   Text="Umbral" />
+                                    Text="Threshold" />
                         <Border Style="{StaticResource InfoIcon}"
                                 Margin="6,0,0,0"
                                 VerticalAlignment="Center"
-                                ToolTip="Nivel a partir del cual se considera que hablas demasiado alto. Escala de 0 a 100.">
+                                 ToolTip="Level above which the input is considered too loud. Scale from 0 to 100.">
                             <TextBlock Text="i"
                                        Foreground="{DynamicResource MutedTextBrush}"
                                        FontSize="10"
@@ -177,11 +177,11 @@
                         <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="0,0,0,8">
                             <TextBlock Style="{StaticResource SectionLabel}"
                                        Margin="0"
-                                       Text="Histéresis" />
+                                        Text="Minimum duration" />
                             <Border Style="{StaticResource InfoIcon}"
                                     Margin="6,0,0,0"
                                     VerticalAlignment="Center"
-                                    ToolTip="Tiempo mínimo que el nivel debe permanecer sobre el umbral para activar la alerta. Evita falsos avisos por picos muy breves.">
+                                     ToolTip="How long the level must remain above the threshold before an alert is triggered. This avoids false alerts from brief peaks.">
                                 <TextBlock Text="i"
                                            Foreground="{DynamicResource MutedTextBrush}"
                                            FontSize="10"
@@ -193,11 +193,11 @@
                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="12,0,0,8">
                             <TextBlock Style="{StaticResource SectionLabel}"
                                        Margin="0"
-                                       Text="Enfriamiento" />
+                                        Text="Cooldown" />
                             <Border Style="{StaticResource InfoIcon}"
                                     Margin="6,0,0,0"
                                     VerticalAlignment="Center"
-                                    ToolTip="Tiempo de espera entre alertas para evitar avisos continuos. Poner 0 elimina la espera.">
+                                     ToolTip="Time between alerts to avoid repeated notifications. Set to 0 to disable the wait.">
                                 <TextBlock Text="i"
                                            Foreground="{DynamicResource MutedTextBrush}"
                                            FontSize="10"
@@ -244,12 +244,12 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
                         <CheckBox x:Name="BeepCheckBox"
                                   Style="{StaticResource DarkCheckBox}"
-                                  Content="Pitido de alerta"
+                                   Content="Alert sound"
                                   Checked="BeepCheckBox_OnToggled"
                                   Unchecked="BeepCheckBox_OnToggled" />
                         <CheckBox x:Name="TopmostCheckBox"
                                   Style="{StaticResource DarkCheckBox}"
-                                  Content="Siempre visible"
+                                   Content="Always on top"
                                   Margin="18,0,0,0"
                                   Checked="TopmostCheckBox_OnToggled"
                                   Unchecked="TopmostCheckBox_OnToggled" />
@@ -257,10 +257,10 @@
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button Style="{StaticResource SecondaryButton}"
-                                Content="Restaurar valores iniciales"
+                                 Content="Restore defaults"
                                 Click="RestoreDefaultsButton_OnClick" />
                         <TextBlock x:Name="RestoreNoticeText"
-                                   Text="Valores restaurados"
+                                    Text="Defaults restored"
                                    Foreground="{DynamicResource AccentBrush}"
                                    FontSize="12"
                                    VerticalAlignment="Center"

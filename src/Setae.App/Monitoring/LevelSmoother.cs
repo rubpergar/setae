@@ -64,7 +64,7 @@ public sealed class LevelSmoother
     {
         if (!float.IsFinite(level) || level < AudioLevel.MinimumRelativeLevel || level > AudioLevel.MaximumRelativeLevel)
         {
-            throw new ArgumentOutOfRangeException(nameof(level), "El nivel relativo debe estar entre 0 y 100.");
+            throw new ArgumentOutOfRangeException(nameof(level), "The relative level must be between 0 and 100.");
         }
     }
 }

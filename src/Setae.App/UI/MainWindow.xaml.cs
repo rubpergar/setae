@@ -160,7 +160,7 @@ public partial class MainWindow : Window
         {
             HysteresisTextBox.Text = ((int)_runtimeMonitoring.MinimumAlertDuration.TotalMilliseconds)
                 .ToString(CultureInfo.InvariantCulture);
-            SetNotice("La histéresis debe ser un número entero entre 100 y 3000 ms.", isError: true);
+            SetNotice("The minimum duration must be an integer between 100 and 3000 ms.", isError: true);
         }
     }
 
@@ -190,7 +190,7 @@ public partial class MainWindow : Window
         {
             CooldownTextBox.Text = _runtimeMonitoring.Cooldown.TotalSeconds
                 .ToString("0.##", CultureInfo.InvariantCulture);
-            SetNotice("El enfriamiento debe ser un número entre 0 y 30 segundos.", isError: true);
+            SetNotice("Cooldown must be a number between 0 and 30 seconds.", isError: true);
         }
     }
 
@@ -320,7 +320,7 @@ public partial class MainWindow : Window
                 else
                 {
                     _ = StopMonitoringAsync();
-                    _deviceNotice = "El micrófono seleccionado no está disponible. Conecta el dispositivo y vuelve a iniciar.";
+                    _deviceNotice = "The selected microphone is unavailable. Connect the device and start again.";
                 }
             }
             else
@@ -331,7 +331,7 @@ public partial class MainWindow : Window
                 }
                 catch (Exception exception)
                 {
-                    SetNotice($"No se pudieron aplicar los ajustes: {exception.Message}", isError: true);
+                    SetNotice($"The settings could not be applied: {exception.Message}", isError: true);
                 }
             }
         }
@@ -366,9 +366,9 @@ public partial class MainWindow : Window
             _loadingUi = false;
 
             _deviceNotice = devices.Count == 0
-                ? "No hay micrófonos de entrada activos. Conecta uno o revisa los permisos de Windows."
+                ? "No active input microphones were found. Connect one or check Windows permissions."
                 : selection is null
-                    ? "El micrófono guardado no está disponible. Selecciona otro dispositivo."
+                    ? "The saved microphone is unavailable. Select another device."
                     : null;
 
             if (selection is null && _monitor.Snapshot.IsRunning)
@@ -378,7 +378,7 @@ public partial class MainWindow : Window
         }
         catch (Exception exception)
         {
-            _settingsNotice = $"No se pudieron enumerar los micrófonos: {exception.Message}";
+            _settingsNotice = $"Microphones could not be enumerated: {exception.Message}";
         }
 
         UpdateUi();
@@ -400,7 +400,7 @@ public partial class MainWindow : Window
     {
         if (SelectedDeviceId is null)
         {
-            SetNotice("Selecciona un micrófono de entrada antes de iniciar.", isError: true);
+            SetNotice("Select an input microphone before starting.", isError: true);
             return;
         }
 
@@ -451,7 +451,7 @@ public partial class MainWindow : Window
 
         var level = Math.Clamp(snapshot.Level, 0f, 100f);
         var threshold = _runtimeMonitoring.Threshold;
-        ThresholdText.Text = $"Umbral {threshold:0}";
+        ThresholdText.Text = $"Threshold {threshold:0}";
 
         var levelBrush = ResolveLevelBrush(snapshot, level, threshold);
         LevelFill.Fill = levelBrush;
@@ -476,7 +476,7 @@ public partial class MainWindow : Window
         var labelX = Math.Clamp(markerX + 1d - labelWidth / 2d, 0d, Math.Max(0d, meterWidth - labelWidth));
         ThresholdText.Margin = new Thickness(labelX, 0, 0, 4);
 
-        StartStopButton.Content = snapshot.IsRunning ? "Detener" : "Iniciar";
+        StartStopButton.Content = snapshot.IsRunning ? "Stop" : "Start";
         StartStopButton.IsEnabled = snapshot.IsRunning || SelectedDeviceId is not null;
     }
 
@@ -504,15 +504,15 @@ public partial class MainWindow : Window
 
         if (!snapshot.IsRunning)
         {
-            return "Detenido";
+            return "Stopped";
         }
 
         if (snapshot.AlertState == AlertState.Pending)
         {
-            return "Sobre el umbral...";
+            return "Above threshold...";
         }
 
-        return level >= threshold ? "Demasiado alto" : "Monitorizando";
+        return level >= threshold ? "Too loud" : "Monitoring";
     }
 
     private void SetNotice(string message, bool isError)
@@ -586,7 +586,7 @@ public partial class MainWindow : Window
         }
         catch (Exception exception)
         {
-            _settingsNotice = $"No se pudo guardar la configuración: {exception.Message}";
+            _settingsNotice = $"The settings could not be saved: {exception.Message}";
         }
     }
 

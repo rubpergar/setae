@@ -42,7 +42,7 @@ public partial class App : System.Windows.Application
         catch (Exception exception)
         {
             System.Windows.MessageBox.Show(
-                $"No se pudo iniciar Setae.\n\n{exception.Message}",
+                $"Setae could not start.\n\n{exception.Message}",
                 "Setae",
                 System.Windows.MessageBoxButton.OK,
                 System.Windows.MessageBoxImage.Error);

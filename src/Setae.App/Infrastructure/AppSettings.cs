@@ -28,7 +28,7 @@ internal static class AppSettingsValidator
     {
         if (!IsValid(settings))
         {
-            throw new ArgumentException("Los ajustes de Setae no son válidos.", nameof(settings));
+            throw new ArgumentException("Setae settings are invalid.", nameof(settings));
         }
     }
 

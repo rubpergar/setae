@@ -4,7 +4,7 @@ using System.Media;
 namespace Setae.App.Infrastructure;
 
 /// <summary>
-/// Reproduce un carillón de dos notas generado en código, sin depender de un dispositivo de salida específico.
+/// Plays a two-note chime generated in code without depending on a specific output device.
 /// </summary>
 internal sealed class BeepPlayer : IDisposable
 {
@@ -31,7 +31,7 @@ internal sealed class BeepPlayer : IDisposable
     }
 
     /// <summary>
-    /// Reproduce el carillón de forma asíncrona sin lanzar excepciones si no hay dispositivo de salida.
+    /// Plays the chime asynchronously without throwing when no output device is available.
     /// </summary>
     public void Play()
     {
@@ -46,7 +46,7 @@ internal sealed class BeepPlayer : IDisposable
         }
         catch
         {
-            // Sin dispositivo de salida no se debe interrumpir al monitor.
+            // Monitoring must continue when no output device is available.
         }
     }
 
@@ -65,7 +65,7 @@ internal sealed class BeepPlayer : IDisposable
         }
         catch
         {
-            // Se ignora durante el apagado de la aplicación.
+            // Ignore errors during application shutdown.
         }
 
         try
@@ -74,12 +74,12 @@ internal sealed class BeepPlayer : IDisposable
         }
         catch
         {
-            // Se ignora durante el apagado de la aplicación.
+            // Ignore errors during application shutdown.
         }
     }
 
     /// <summary>
-    /// Genera un WAV PCM16 mono de 44100 Hz con las dos notas del carillón.
+    /// Generates a 44,100 Hz mono PCM16 WAV containing the two chime notes.
     /// </summary>
     internal static byte[] CreateWavData()
     {
