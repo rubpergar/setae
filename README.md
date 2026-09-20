@@ -1,103 +1,114 @@
-# Setae: Offline Microphone Loudness Alert for Windows
+<div align="center">
 
-Setae is a free-forever, open-source Windows utility that warns you when your microphone level stays too loud while you are wearing headphones. It is designed for gaming, voice chat, calls, shared spaces, and anyone who wants a quiet private reminder instead of speech recognition.
+<!-- IMAGE SLOT 1: add the logo at `docs/images/setae-logo.png` and place it here.
+<img src="docs/images/setae-logo.png" alt="Setae logo" width="112">
+-->
 
-Audio is processed locally. Setae does not record, transcribe, recognize, upload, or analyze the content of your speech. It includes no ads, accounts, telemetry, or runtime network requests.
+<h1>Setae</h1>
 
-> Setae is an active work in progress. The MVP is implemented and the project is being validated with more hardware and longer sessions.
+<p><strong>Private microphone loudness alerts for Windows</strong></p>
 
-[Download and releases](../../releases) | [FAQ](docs/FAQ.md) | [Report a bug](../../issues/new?template=bug_report.yml) | [Request a feature](../../issues/new?template=feature_request.yml)
+<p>
+  <a href="https://github.com/rubpergar/setae/actions/workflows/ci.yml"><img src="https://github.com/rubpergar/setae/actions/workflows/ci.yml/badge.svg?branch=main" alt="Build and test status"></a>
+  <a href="https://github.com/rubpergar/setae/releases"><img src="https://img.shields.io/github/v/release/rubpergar/setae?sort=semver" alt="Latest release"></a>
+  <a href="https://github.com/rubpergar/setae/blob/main/LICENSE"><img src="https://img.shields.io/github/license/rubpergar/setae" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/platform-Windows%2010%2F11-0078D4" alt="Windows 10 and 11">
+</p>
 
-## Why Setae exists
+<p>
+  <a href="https://github.com/rubpergar/setae/releases">Download</a> |
+  <a href="docs/FAQ.md">FAQ</a> |
+  <a href="https://github.com/rubpergar/setae/issues">Issues</a> |
+  <a href="CONTRIBUTING.md">Contribute</a>
+</p>
 
-Headphones make it harder to judge how loudly you are speaking. During a focused, tense, or exciting game session, your voice can gradually get louder without you noticing. Setae provides an external visual and optional audible reference without listening to what you say.
+</div>
+
+Setae is a privacy-first Windows microphone monitor for gaming, voice chat, calls, streaming, and focused work. Headphones can make it difficult to notice when your voice gets louder; Setae gives you a quiet visual warning and, optionally, a short alert sound when the selected input remains above your chosen threshold.
+
+It measures the level of the microphone signal, not speech content. There is no recording, transcription, account, advertising, telemetry, or runtime network connection.
+
+## Why Setae?
+
+- Notice sustained loudness before it becomes uncomfortable for other people.
+- Keep a compact meter visible while gaming, calling, or wearing headphones.
+- Get a private reminder without sending audio anywhere.
+- Use it without an installer, .NET installation, or administrator privileges.
+
+## See it in action
+
+<!-- IMAGE SLOT 2: add the main interface screenshot at `docs/images/setae-main-window.png` and place it here.
+<p align="center"><img src="docs/images/setae-main-window.png" alt="Setae main window showing the microphone level meter" width="520"></p>
+-->
+
+The main window shows a live relative level meter from 0 to 100, the configured threshold, the current monitoring state, and Start or Stop controls. The meter changes between normal, warning, and alert states as the input level changes.
 
 ## Features
 
-- Real-time level meter for the selected microphone, using a relative 0-100 scale.
-- Configurable threshold, minimum time above the threshold, and cooldown between alerts.
-- Optional short alert sound and green, amber, and red visual states.
-- Compact dark window that can stay on top while monitoring.
-- Local settings stored in `%AppData%\setae\settings.json`.
-- Explicit handling for missing microphones, blocked access, device disconnects, and capture errors.
-- No administrator privileges required; Windows microphone access must still be allowed.
+- Real-time meter for the selected Windows input microphone.
+- Configurable threshold from 0 to 100.
+- Minimum loudness duration from 100 ms to 3 seconds to avoid reacting to brief peaks.
+- Configurable cooldown from 0 to 30 seconds between alerts.
+- Optional short alert sound and always-on-top window mode.
+- Clear handling for missing microphones, denied permissions, disconnects, and capture errors.
+- Portable, self-contained `win-x64` release with local-only processing.
 
-## Privacy facts
+## Configure it your way
+
+<!-- IMAGE SLOT 3: add the settings screenshot at `docs/images/setae-settings.png` and place it here.
+<p align="center"><img src="docs/images/setae-settings.png" alt="Setae settings panel" width="520"></p>
+-->
+
+Open **Settings** to choose the input microphone and tune the behavior to your voice and setup:
+
+- **Threshold:** the relative level at which Setae considers the input too loud.
+- **Minimum duration:** how long the level must stay above the threshold before an alert is triggered.
+- **Cooldown:** the wait between alerts so repeated reminders do not become distracting.
+- **Alert sound:** enable or disable the short audible reminder.
+- **Always on top:** keep the meter visible over other windows.
+- **Restore defaults:** return to the default monitoring values.
+
+Preferences are stored locally in `%AppData%\setae\settings.json`. The file contains configuration only, never audio, transcripts, or usage history.
+
+## Privacy by design
 
 | Property | Setae |
 | --- | --- |
-| Audio recording | No |
+| Records or saves microphone audio | No |
 | Speech recognition or transcription | No |
-| Network requests at runtime | No |
-| Telemetry or analytics | No |
-| Account required | No |
-| Price | Free forever |
-| Persistent data | Local preferences only |
-| Processing | Local microphone level calculation |
+| Runtime network requests | No |
+| Accounts, ads, telemetry, or analytics | No |
+| Stored data | Local preferences only |
+| Processing | Local microphone-level calculation |
 
-Microphone samples are not retained or written to disk by Setae. Temporary buffers exist while the capture library processes the current input. The stored settings contain no audio, transcripts, or usage history. They can contain the selected microphone identifier and window preferences. The displayed level is relative to the digital microphone signal; it is not a certified acoustic dB SPL measurement.
+Microphone samples are held only in temporary buffers while the current level is calculated. Setae does not retain them or write them to disk. The meter is a relative 0-100 signal scale, not a certified acoustic dB SPL measurement.
 
 ## Download
 
-Stable and test builds will be published in [GitHub Releases](../../releases). The intended distribution is a self-contained, single-file `win-x64` executable, so installing the .NET runtime is not required.
+Download the latest portable build from [GitHub Releases](https://github.com/rubpergar/setae/releases/latest):
 
-The current project is still in active MVP validation. Until a release is published, build the portable executable locally using the commands below.
+1. Download `Setae-vX.Y.Z-win-x64.zip` from the release assets
+2. Extract the ZIP to a folder you control
+3. Run `Setae.App.exe`
 
-### For users
+Setae does not modify the registry and does not require administrator privileges. Windows microphone access must still be allowed in **Settings > Privacy & security > Microphone**.
 
-1. Open the latest version in [GitHub Releases](../../releases).
-2. Download `Setae-vX.Y.Z-win-x64.zip`, not `Code > Download ZIP`.
-3. Extract the ZIP to a folder you control.
-4. Run `Setae.App.exe`.
-5. Allow microphone access in Windows privacy settings if Windows blocks it.
-
-Setae is portable and does not install .NET, modify the registry, or require administrator privileges. Closing the window exits the application; the current MVP does not provide a background system-tray mode.
-
-Windows may show an “Unknown publisher” or SmartScreen warning because early releases are not Authenticode-signed yet. Compare the SHA-256 value published with the release before running the file and review the source commit if you need to verify the build.
+Early releases are not Authenticode-signed yet, so Windows may show an Unknown publisher or SmartScreen warning. Verify the SHA-256 value published with the release before running the executable.
 
 ## Requirements
 
-- Windows 10 or Windows 11.
-- x64 hardware.
-- A microphone that Windows exposes as an active capture device.
+- Windows 10 or Windows 11
+- x64 hardware
+- An active microphone exposed by Windows
 
-## Build, test, and publish
+## Help and project links
 
-```text
-dotnet build Setae.sln -c Release
-dotnet test tests/Setae.App.Tests/Setae.App.Tests.csproj -c Release
-dotnet build src/Setae.App/Setae.App.csproj -c Release -r win-x64
-dotnet publish src/Setae.App/Setae.App.csproj -c Release -p:PublishProfile=portable
-```
-
-The installed application does not require administrator privileges and should continue to work when its network access is blocked by the Windows firewall. Building the project and running CI do require network access to restore SDK packages.
-
-## Architecture
-
-There is one production project organized by responsibility:
-
-```text
-src/Setae.App/
-  Audio/          WASAPI capture, sample conversion, and level calculation
-  Monitoring/     Smoothing, threshold, alert state machine, and preferences
-  Infrastructure/ Persistence, alert sound, and single-instance handling
-  UI/             Compact window and settings
-```
-
-The audio and monitoring layers do not depend on WPF or the file system. The UI reads the state published by the monitor.
-
-## Scope and current limitations
-
-Setae intentionally focuses on one job: helping you notice when your voice gets too loud. It does not provide speech recognition, recording, audio editing, advanced noise filtering, game-specific overlays, global hotkeys, profiles, automatic updates, accounts, or online services.
-
-The MVP is implemented. Manual validation with integrated, USB, Bluetooth, and headset microphones, Discord, games, reconnects, scaling, firewall blocking, and long sessions remains part of the ongoing development work. System-tray background mode, automatic startup, and second-instance activation are not implemented in the current MVP.
-
-## Contributing
-
-Bug reports, hardware compatibility reports, documentation improvements, and focused pull requests are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change.
+- [FAQ](docs/FAQ.md) for privacy, compatibility, permissions, and troubleshooting questions.
+- [Releases](https://github.com/rubpergar/setae/releases) for downloads and checksums.
+- [Changelog](CHANGELOG.md) for project history.
+- [Report a bug](https://github.com/rubpergar/setae/issues/new?template=bug_report.yml) or [request a feature](https://github.com/rubpergar/setae/issues/new?template=feature_request.yml).
+- [Contributing guide](CONTRIBUTING.md) and [security policy](SECURITY.md).
 
 ## License
 
 Setae is released under the [MIT License](LICENSE).
-
-See [docs/FAQ.md](docs/FAQ.md) for user questions, [CHANGELOG.md](CHANGELOG.md) for project history, [SECURITY.md](SECURITY.md) for vulnerability reports, and [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md) for dependency licenses.
