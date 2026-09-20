@@ -1,0 +1,94 @@
+name: Publish release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore Setae.sln
+
+      - name: Build solution
+        run: dotnet build Setae.sln -c Release --no-restore
+
+      - name: Run tests
+        run: dotnet test tests/Setae.App.Tests/Setae.App.Tests.csproj -c Release --no-build
+
+      - name: Publish portable application
+        run: dotnet publish src/Setae.App/Setae.App.csproj -c Release -p:PublishProfile=portable --no-restore
+
+      - name: Package and hash release
+        shell: pwsh
+        run: |
+          $publish = Join-Path $env:GITHUB_WORKSPACE 'src\Setae.App\bin\Release\net10.0-windows\win-x64\publish'
+          $staging = Join-Path $env:RUNNER_TEMP 'setae-release'
+          $zip = Join-Path $env:GITHUB_WORKSPACE "Setae-$env:GITHUB_REF_NAME-win-x64.zip"
+          $hashFile = Join-Path $env:GITHUB_WORKSPACE "Setae-$env:GITHUB_REF_NAME-win-x64.sha256"
+          $notesFile = Join-Path $env:RUNNER_TEMP 'setae-release-notes.md'
+
+          New-Item -ItemType Directory -Path $staging -Force | Out-Null
+          Copy-Item (Join-Path $publish 'Setae.App.exe') $staging
+          Copy-Item (Join-Path $env:GITHUB_WORKSPACE 'LICENSE') $staging
+          Copy-Item (Join-Path $env:GITHUB_WORKSPACE 'THIRD-PARTY-NOTICES.md') $staging
+
+          @"
+          Setae $env:GITHUB_REF_NAME portable release
+
+          Windows 10/11 x64, self-contained, single-file executable.
+          No .NET installation or administrator privileges are required.
+
+          Privacy: local microphone-level processing, no audio recording,
+          no speech recognition, no telemetry, and no runtime network requests.
+
+          This release is not Authenticode-signed yet. Windows SmartScreen may
+          show an Unknown publisher warning for this new executable.
+
+          Source commit: $env:GITHUB_SHA
+          "@ | Set-Content -Path (Join-Path $staging 'README.txt') -Encoding utf8
+
+          Compress-Archive -Path (Join-Path $staging '*') -DestinationPath $zip -Force
+          $hash = (Get-FileHash $zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $(Split-Path $zip -Leaf)" | Set-Content -Path $hashFile -Encoding ascii
+
+          @"
+          ## Portable Windows release
+
+          Download `Setae-$env:GITHUB_REF_NAME-win-x64.zip` and extract it before running `Setae.App.exe`.
+
+          - Windows 10/11 x64
+          - Self-contained single-file executable
+          - No .NET installation or administrator privileges required
+          - SHA-256: see the `.sha256` asset
+          - Source commit: `$env:GITHUB_SHA`
+
+          This release is not Authenticode-signed yet. Windows SmartScreen may show an Unknown publisher warning. Verify the SHA-256 value and review the source commit before running the executable.
+          "@ | Set-Content -Path $notesFile -Encoding utf8
+
+          "ZIP=$zip" >> $env:GITHUB_ENV
+          "HASH_FILE=$hashFile" >> $env:GITHUB_ENV
+          "NOTES_FILE=$notesFile" >> $env:GITHUB_ENV
+
+      - name: Create GitHub release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create $env:GITHUB_REF_NAME $env:ZIP $env:HASH_FILE --repo $env:GITHUB_REPOSITORY --title "Setae $env:GITHUB_REF_NAME" --notes-file $env:NOTES_FILE
